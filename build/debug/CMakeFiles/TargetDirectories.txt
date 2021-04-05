@@ -1,0 +1,14 @@
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/install/strip.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/edit_cache.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/pathfinder.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/rebuild_cache.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/list_install_components.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/install/local.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/CMakeFiles/install.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/install/strip.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/edit_cache.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/PathFinder.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/rebuild_cache.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/list_install_components.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/install/local.dir
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/build/debug/PathFinder/CMakeFiles/install.dir

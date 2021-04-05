@@ -19,7 +19,7 @@
 // include other PathFinder classes
 #include "mNode.h"
 
-#define OBSTACLES_RATE 0.4
+#define OBSTACLES_RATE 0.25
 
 using namespace std;
 
@@ -47,11 +47,13 @@ public:
 
 	virtual ~mGrid()
 	{
+		cout << "deleting grid..." << endl;
 		if(nodes != NULL)
 		{
 			delete [] nodes;
 			nodes = NULL;
 		}
+		cout << "deleting grid...Done" << endl;
 	}
 
 	int getNodeIdx(int x, int y)
@@ -66,9 +68,8 @@ public:
 		return this->nodes[getNodeIdx(x,y)];
 	}
 
-	vector<mNode *> getNeighbors(int _x, int _y)
+	vector<mNode *> getConnectedNeighbors(int _x, int _y)
 	{
-		cout << "getting node ("<< _x << ", " << _y << ") neighbors" << endl;
 		vector<mNode*> neighbors(0);
 		int index;
 		if(_x-1 >= 0)

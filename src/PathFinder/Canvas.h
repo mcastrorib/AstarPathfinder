@@ -21,7 +21,7 @@
 
 #define CANVAS_WIDTH 800
 #define CANVAS_HEIGHT 800
-#define GRID_LINEWIDTH 2
+#define GRID_LINEWIDTH 1
 #define BG_COLOR {127, 127, 127}
 #define GRID_COLOR {0, 0, 0}
 
@@ -42,6 +42,20 @@ public:
     int imageHeight;
     string windowName;
     
+
+
+	Canvas(int _x, int _y) : windowName("Main Window")
+	{
+		this->grid = new mGrid(_x, _y);
+		this->backgroundColor = BG_COLOR;
+		this->gridColor = GRID_COLOR;
+		this->gridLinewidth = GRID_LINEWIDTH;
+		(*this).resizeImage();
+		image = new cv::Mat(this->imageHeight, this->imageWidth, CV_8UC3, this->backgroundColor);
+		this->imageChannels = image->channels();
+		(*this).drawGridLines();
+	}
+
 	Canvas(mGrid *_grid) : windowName("Main Window"), grid(_grid)
 	{
 		this->backgroundColor = BG_COLOR;
@@ -67,27 +81,25 @@ public:
 
 	virtual ~Canvas()
 	{
+		cout << "deleting canvas..." << endl;
 		if(image != NULL)
 		{
 			delete image;
 			image = NULL;
-			// cout << "image deleted" << endl;
 		}
 
 		if(grid != NULL)
 		{
 			delete grid;
 			grid = NULL;
-			// cout << "grid deleted" << endl;
 		}
-
-		cout << "canvas deleted" << endl;
+		cout << "deleting canvas...Done" << endl;
 	};
 
-	void show()
+	void show(int time=0)
 	{
 		cv::imshow(this->windowName, (*image));
-		cv::waitKey(0); // Wait for a keystroke in the window
+		cv::waitKey(time); // Wait for a keystroke in the window
 	}
 
 	void resizeImage()

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <omp.h>
 
 // include OpenCV core functions
 #include <opencv2/core.hpp>
@@ -19,13 +20,13 @@
 #include "mGrid.h"
 #include "Canvas.h"
 
-#define WALL_COLOR {50, 50, 50}
-#define FREE_COLOR {200, 200, 200}
+#define WALL_COLOR {10, 10, 10}
+#define FREE_COLOR {127, 127, 127}
 #define START_COLOR {0, 255, 255}
 #define END_COLOR {214, 0, 110}
-#define OPEN_COLOR {0, 255, 0}
-#define CLOSED_COLOR {0, 0, 255}
-
+#define OPEN_COLOR {0, 200, 0}
+#define CLOSED_COLOR {0, 0, 200}
+#define PATH_COLOR {255, 255, 255}
 
 
 using namespace std;
@@ -39,11 +40,27 @@ public:
 	Canvas *canvas;
 	vector<mNode *> openSet;
 	vector<mNode *> closedSet;
+	bool visualize;
+	int visualTimeRate;
+
+	AStar(int _x, int _y) :  startNode(NULL), 
+							 endNode(NULL), 
+							 path(NULL),
+							 visualize(false),
+							 visualTimeRate(0)
+	{		
+		this->canvas = new Canvas(_x, _y);
+		vector<mNode*> openSet();
+		vector<mNode*> closedSet();
+
+		(*this).drawGridNodes();
+	}
 
 	AStar(Canvas *_canvas) : startNode(NULL), 
 							 endNode(NULL), 
 							 path(NULL), 
-							 canvas(_canvas)
+							 canvas(_canvas),
+							 visualize(false)
 	{		
 		vector<mNode*> openSet();
 		vector<mNode*> closedSet();
@@ -57,33 +74,31 @@ public:
 		this->endNode = _other.endNode;
 		this->path = _other.path;
 		this->canvas = _other.canvas;
+		this->openSet = _other.openSet;
+		this->closedSet = _other.closedSet;
+		this->visualize = _other.visualize;
 	}
 
 	virtual ~AStar()
 	{
-		if(startNode != NULL)
-		{
-			delete startNode;
-			startNode = NULL;
-		}
+		cout << "deleting Astar..." << endl;
 
-		if(endNode != NULL)
+		if(this->canvas != NULL)
 		{
-			delete endNode;
-			endNode = NULL;
+			delete this->canvas;
+			this->canvas = NULL;
 		}
+		this->startNode = NULL;
+		this->endNode = NULL;
+		this->path = NULL;
 
-		if(path != NULL)
-		{
-			delete path;
-			path = NULL;
-		}
+		cout << "deleting Astar...Done" << endl;
+	}
 
-		if(canvas != NULL)
-		{
-			delete canvas;
-			canvas = NULL;
-		}
+	void setVisualization(bool b=true, int time=0)
+	{
+		this->visualize = b;
+		this->visualTimeRate = time;
 	}
 
 	void setStartNode(int x, int y)
@@ -105,11 +120,11 @@ public:
 		(*this).drawPoints();
 	}
 
-	void show()
+	void show(int time = 0)
 	{
 		if(this->canvas != NULL)
 		{
-			this->canvas->show();
+			this->canvas->show(time);
 		}
 	}
 
@@ -153,6 +168,21 @@ public:
 				this->canvas->drawRectangle(posX, posY, CLOSED_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
 			}
 		}
+
+		// draw current best path
+		mNode *currentNode = this->path;
+		while(currentNode != NULL)
+		{
+			int currentNodeX = currentNode->x;
+			int currentNodeY = currentNode->y;
+			posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
+			posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
+			this->canvas->drawRectangle(posX, posY, PATH_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
+
+			// update current node
+			currentNode = currentNode->previous;
+		}  
+
 	}
 
 	void drawGridNodes()
@@ -179,66 +209,80 @@ public:
 
 	void findPath()
 	{
+		double stime = omp_get_wtime();
+		cout << "starting findPath() method..." << endl;
+		
 		this->startNode->setGValue(0.0);
 		this->startNode->setHValue(this->endNode);
 		this->openSet.push_back(this->startNode);
-		
-		int currentNodeIdx = 0;
 		mNode *currentNode = this->startNode;
-
-		cout << "start node:" << endl;
-		currentNode->print();
+		this->path = currentNode;
+		int iter = 0;
 
 		while(this->openSet.size() > 0)
 		{
-			currentNodeIdx = this->getNodeWithLowestValue();
-			currentNode = &this->canvas->grid->nodes[currentNodeIdx];
-			(*this).removeFromOpenSet(currentNodeIdx);
-			this->closedSet.push_back(currentNode);
+			iter++;
+			if(iter % 100 == 0) 
+				cout << "iter: " << iter << endl;			
 
-			cout << "current node:" << endl;
-			currentNode->print();		
+			currentNode = (*this).getNodeWithLowestValue();
+			this->closedSet.push_back(currentNode);
+			this->path = currentNode;
 
 			if(currentNode->compare(this->endNode))
 			{
-				cout << "end node was found!" << endl;
+				this->path = this->endNode;
 				break;
 			}
 
-			vector<mNode*> neighbors = this->canvas->grid->getNeighbors(currentNode->x, currentNode->y);
+			vector<mNode*> neighbors = this->canvas->grid->getConnectedNeighbors(currentNode->x, currentNode->y);
 			for (int node = 0; node < neighbors.size(); node++)
 			{
-				cout << "neighbor " << node << ":" << endl;
-				neighbors[node]->print();
-
-				if(neighbors[node]->walkable or 
-				   std::find(this->closedSet.begin(), this->closedSet.end(), neighbors[node]) != this->closedSet.end()) 
+				bool closedSetContainsNode;
+				if(std::find(this->closedSet.begin(), this->closedSet.end(), neighbors[node]) != this->closedSet.end())
+				{ closedSetContainsNode = true; } else closedSetContainsNode = false;
+				
+				if(!closedSetContainsNode) 
 				{
 					double newPath = currentNode->getFValue() + 1.0;
-					std::vector<mNode*>::iterator findIdx;
-					findIdx = std::find(this->openSet.begin(), this->openSet.end(), neighbors[node]);	
-					if(findIdx != this->openSet.end() or
-					   newPath < neighbors[node]->getFValue())
+					
+					bool openSetContainsNode;
+					if(std::find(this->openSet.begin(), this->openSet.end(), neighbors[node]) != this->openSet.end())
+					{ openSetContainsNode = true; } else openSetContainsNode = false;	
+					
+					if(newPath < neighbors[node]->getFValue() or !openSetContainsNode)
 					{	
-						cout << "evaluating neighbor " << node << endl;
 						neighbors[node]->setPrevious(currentNode);
 						neighbors[node]->setGValue(currentNode->gValue + 1.0);
 						neighbors[node]->setHValue(this->endNode);
-						neighbors[node]->print();
-
-						if(findIdx != this->openSet.end()) 
-							cout << "adding neighbor" << node << " to openSet" << endl;
+						
+						if(!openSetContainsNode) 
 							this->openSet.push_back(neighbors[node]);
 					}
 				}
 			}
 
-			(*this).draw();
-			(*this).show();
+			// draw current stage
+			if(this->visualize)
+			{
+				(*this).draw();
+				(*this).show(this->visualTimeRate);
+			}
 		}
+
+		stime = omp_get_wtime() - stime;
+		cout << endl << "search time: " << stime << " secs" << endl; 
+		if(this->path->compare(this->endNode)) 
+			cout << "path to end node was found :)" << endl;
+		else 
+			cout << "no path found :(" << endl;
+		
+		// draw last stage
+		(*this).draw();
+		(*this).show();
 	}
 
-	int getNodeWithLowestValue()
+	mNode * getNodeWithLowestValue()
 	{
 		int lowestIdx = 0;
 		mNode *currentNode = this->openSet[lowestIdx];
@@ -262,7 +306,8 @@ public:
 			}
 		}
 
-		return lowestIdx;
+		(*this).removeFromOpenSet(lowestIdx);
+		return currentNode;
 	}
 
 	void removeFromOpenSet(int index)

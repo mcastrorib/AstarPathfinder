@@ -1,0 +1,7 @@
+05/04/2021
+Estado atual: o programa procura o caminho até o ponto final e recupera se houver um.
+A implementação está usando os containers <vector> para armazenar os conjuntos openSet e closedSet
+
+Numa malha de 100x100 com taxa de obstaculos de 25%:
+sem visualização: 0.021 secs (~6500 iterações)
+com visualização: 16.657 secs (~6500 iterações)
