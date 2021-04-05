@@ -192,6 +192,38 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
   /usr/include/c++/9/bits/stl_vector.h \
   /usr/include/c++/9/bits/stl_bvector.h \
   /usr/include/c++/9/bits/vector.tcc \
+  /usr/include/c++/9/random \
+  /usr/include/c++/9/cmath \
+  /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
+  /usr/include/c++/9/limits \
+  /usr/include/c++/9/bits/random.h \
+  /usr/include/c++/9/bits/uniform_int_dist.h \
+  /usr/include/x86_64-linux-gnu/c++/9/bits/opt_random.h \
+  /usr/include/c++/9/bits/random.tcc \
+  /usr/include/c++/9/numeric \
+  /usr/include/c++/9/bits/stl_numeric.h \
+  /usr/include/c++/9/map \
+  /usr/include/c++/9/bits/stl_tree.h \
+  /usr/include/c++/9/ext/aligned_buffer.h \
+  /usr/include/c++/9/bits/stl_map.h \
+  /usr/include/c++/9/tuple \
+  /usr/include/c++/9/utility \
+  /usr/include/c++/9/bits/stl_relops.h \
+  /usr/include/c++/9/array \
+  /usr/include/c++/9/bits/uses_allocator.h \
+  /usr/include/c++/9/bits/invoke.h \
+  /usr/include/c++/9/bits/stl_multimap.h \
+  /usr/include/c++/9/bits/erase_if.h \
   /usr/include/opencv4/opencv2/core.hpp \
   /usr/include/opencv4/opencv2/core/cvdef.h \
   /usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h \
@@ -211,9 +243,6 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
   /usr/lib/gcc/x86_64-linux-gnu/9/include/mmintrin.h \
   /usr/lib/gcc/x86_64-linux-gnu/9/include/mm_malloc.h \
   /usr/include/c++/9/stdlib.h \
-  /usr/include/c++/9/array \
-  /usr/include/c++/9/utility \
-  /usr/include/c++/9/bits/stl_relops.h \
   /usr/include/opencv4/opencv2/core/version.hpp \
   /usr/include/opencv4/opencv2/core/base.hpp \
   /usr/include/opencv4/opencv2/opencv_modules.hpp \
@@ -223,39 +252,21 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
   /usr/include/c++/9/bits/algorithmfwd.h \
   /usr/include/c++/9/bits/stl_heap.h \
   /usr/include/c++/9/bits/stl_tempbuf.h \
-  /usr/include/c++/9/bits/uniform_int_dist.h \
-  /usr/include/c++/9/limits \
   /usr/include/opencv4/opencv2/core/cvstd.hpp \
   /usr/include/c++/9/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/c++/9/cmath \
-  /usr/include/math.h \
-  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
-  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
-  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
-  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
-  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
-  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
-  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
   /usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/9/memory \
   /usr/include/c++/9/bits/stl_raw_storage_iter.h \
   /usr/include/c++/9/ext/concurrence.h \
-  /usr/include/c++/9/bits/uses_allocator.h \
   /usr/include/c++/9/bits/unique_ptr.h \
-  /usr/include/c++/9/tuple \
-  /usr/include/c++/9/bits/invoke.h \
   /usr/include/c++/9/bits/shared_ptr.h \
   /usr/include/c++/9/bits/shared_ptr_base.h \
   /usr/include/c++/9/bits/allocated_ptr.h \
   /usr/include/c++/9/bits/refwrap.h \
-  /usr/include/c++/9/ext/aligned_buffer.h \
   /usr/include/c++/9/bits/shared_ptr_atomic.h \
   /usr/include/c++/9/bits/atomic_base.h \
   /usr/include/c++/9/bits/atomic_lockfree_defines.h \
@@ -300,26 +311,18 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
   /usr/include/opencv4/opencv2/videoio.hpp \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mNode.h \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mGrid.h \
-  /usr/include/c++/9/random \
-  /usr/include/c++/9/bits/random.h \
-  /usr/include/x86_64-linux-gnu/c++/9/bits/opt_random.h \
-  /usr/include/c++/9/bits/random.tcc \
-  /usr/include/c++/9/numeric \
-  /usr/include/c++/9/bits/stl_numeric.h \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mNode.h \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/Canvas.h \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mGrid.h \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/AStar.h \
   /usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h \
+  /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mHeap.h \
   /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/Canvas.h \
+  /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mHeap.h \
   pathfinder_config.h
 
 
 /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/AStar.h:
-
-/usr/include/c++/9/numeric:
-
-/usr/include/c++/9/random:
 
 /usr/include/opencv4/opencv2/imgcodecs.hpp:
 
@@ -363,35 +366,11 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
 
 /usr/include/c++/9/bits/unique_ptr.h:
 
-/usr/include/c++/9/bits/uses_allocator.h:
-
-/usr/include/c++/9/ext/concurrence.h:
-
 /usr/include/opencv4/opencv2/core/types.hpp:
 
 /usr/include/c++/9/bits/stl_raw_storage_iter.h:
 
-/usr/include/c++/9/ext/aligned_buffer.h:
-
-/usr/include/c++/9/memory:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
-
-/usr/include/opencv4/opencv2/core/mat.inl.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
-
-/usr/include/opencv4/opencv2/core/operations.hpp:
-
-/usr/include/math.h:
-
-/usr/include/c++/9/cmath:
-
 /usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-
-/usr/include/c++/9/limits:
 
 /usr/include/c++/9/bits/parse_numbers.h:
 
@@ -404,14 +383,6 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
 /usr/include/c++/9/climits:
 
 /usr/include/opencv4/opencv2/core/version.hpp:
-
-/usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h:
-
-/usr/include/string.h:
-
-/usr/include/opencv4/opencv2/core/cvstd.hpp:
-
-/usr/include/c++/9/array:
 
 /usr/include/c++/9/stdlib.h:
 
@@ -427,15 +398,53 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
 
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
 
-/usr/include/c++/9/bits/stl_numeric.h:
-
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
 /usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h:
+
+/usr/include/c++/9/ext/concurrence.h:
+
+/usr/include/c++/9/bits/uses_allocator.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h:
+
+/usr/include/string.h:
+
+/usr/include/opencv4/opencv2/core/cvstd.hpp:
+
+/usr/include/c++/9/array:
+
+/usr/include/c++/9/memory:
+
+/usr/include/c++/9/ext/aligned_buffer.h:
+
+/usr/include/c++/9/bits/stl_tree.h:
+
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
+
+/usr/include/c++/9/bits/stl_numeric.h:
+
+/usr/include/c++/9/numeric:
+
+/usr/include/c++/9/limits:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
+
+/usr/include/opencv4/opencv2/core/mat.inl.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
+
+/usr/include/opencv4/opencv2/core/operations.hpp:
+
+/usr/include/math.h:
+
+/usr/include/c++/9/cmath:
+
+/usr/include/c++/9/random:
 
 /usr/include/c++/9/bits/vector.tcc:
 
@@ -456,6 +465,8 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
 /usr/include/c++/9/bits/basic_ios.tcc:
 
 /usr/include/x86_64-linux-gnu/c++/9/bits/ctype_inline.h:
+
+/usr/include/c++/9/bits/erase_if.h:
 
 /usr/include/c++/9/bits/invoke.h:
 
@@ -539,9 +550,13 @@ CMakeFiles/pathfinder.dir/main.cpp.o: /home/matheus/Documentos/doutorado_ic/tese
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
+/usr/include/c++/9/bits/stl_map.h:
+
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
 /usr/include/c++/9/cstdlib:
+
+/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mHeap.h:
 
 /usr/include/opencv4/opencv2/opencv_modules.hpp:
 
@@ -641,6 +656,8 @@ pathfinder_config.h:
 
 /home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/Canvas.h:
 
+/usr/include/c++/9/map:
+
 /usr/include/c++/9/ext/alloc_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
@@ -736,6 +753,8 @@ pathfinder_config.h:
 /usr/include/c++/9/initializer_list:
 
 /usr/include/c++/9/clocale:
+
+/usr/include/c++/9/bits/stl_multimap.h:
 
 /usr/include/c++/9/bits/stl_construct.h:
 
@@ -837,9 +856,9 @@ pathfinder_config.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
-/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
-
 /usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
+/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
 

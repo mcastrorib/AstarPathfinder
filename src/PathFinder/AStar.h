@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <omp.h>
+#include <map>
 
 // include OpenCV core functions
 #include <opencv2/core.hpp>
@@ -17,16 +18,17 @@
 
 // include other PathFinder classes
 #include "mNode.h"
+#include "mHeap.h"
 #include "mGrid.h"
 #include "Canvas.h"
 
 #define WALL_COLOR {10, 10, 10}
-#define FREE_COLOR {127, 127, 127}
-#define START_COLOR {0, 255, 255}
-#define END_COLOR {214, 0, 110}
-#define OPEN_COLOR {0, 200, 0}
-#define CLOSED_COLOR {0, 0, 200}
-#define PATH_COLOR {255, 255, 255}
+#define FREE_COLOR {150, 150, 150}
+#define OPEN_COLOR {112, 112, 0}
+#define CLOSED_COLOR {80, 80, 0}
+#define START_COLOR {0, 0, 110}
+#define END_COLOR {0, 0, 220}
+#define PATH_COLOR {0, 0, 230}
 
 
 using namespace std;
@@ -38,20 +40,26 @@ public:
 	mNode *endNode;
 	mNode *path;
 	Canvas *canvas;
-	vector<mNode *> openSet;
-	vector<mNode *> closedSet;
+	mHeap *openSet;
+	map<mNode *, int> closedSet;
 	bool visualize;
 	int visualTimeRate;
+	bool drawOpenSet;
+	bool drawClosedSet;
+	
 
 	AStar(int _x, int _y) :  startNode(NULL), 
 							 endNode(NULL), 
 							 path(NULL),
+							 openSet(NULL),
+							 drawOpenSet(true),
+							 drawClosedSet(true),
 							 visualize(false),
 							 visualTimeRate(0)
 	{		
 		this->canvas = new Canvas(_x, _y);
-		vector<mNode*> openSet();
-		vector<mNode*> closedSet();
+		// vector<mNode*> openSet();
+		map<mNode*, int> closedSet();
 
 		(*this).drawGridNodes();
 	}
@@ -59,11 +67,15 @@ public:
 	AStar(Canvas *_canvas) : startNode(NULL), 
 							 endNode(NULL), 
 							 path(NULL), 
+							 openSet(NULL),
 							 canvas(_canvas),
-							 visualize(false)
+							 drawOpenSet(true),
+							 drawClosedSet(true),
+							 visualize(false),
+							 visualTimeRate(0)
 	{		
-		vector<mNode*> openSet();
-		vector<mNode*> closedSet();
+		// vector<mNode*> openSet();
+		map<mNode*, int> closedSet();
 
 		(*this).drawGridNodes();
 	}
@@ -77,22 +89,44 @@ public:
 		this->openSet = _other.openSet;
 		this->closedSet = _other.closedSet;
 		this->visualize = _other.visualize;
+		this->visualTimeRate = _other.visualTimeRate;
+		this->drawOpenSet = _other.drawOpenSet;
+		this->drawClosedSet = _other.drawClosedSet;
 	}
 
 	virtual ~AStar()
 	{
 		cout << "deleting Astar..." << endl;
+		
+		this->startNode = NULL;
+		this->endNode = NULL;
+		this->path = NULL;
+
+		if(this->openSet != NULL)
+		{
+			delete this->openSet;
+			this->openSet = NULL;
+		}
 
 		if(this->canvas != NULL)
 		{
 			delete this->canvas;
 			this->canvas = NULL;
 		}
-		this->startNode = NULL;
-		this->endNode = NULL;
-		this->path = NULL;
+
+
 
 		cout << "deleting Astar...Done" << endl;
+	}
+
+	void setDrawOpenSet(bool _b)
+	{
+		this->drawOpenSet = _b;
+	}
+
+	void setDrawClosedSet(bool _b)
+	{
+		this->drawClosedSet = _b;
 	}
 
 	void setVisualization(bool b=true, int time=0)
@@ -130,7 +164,57 @@ public:
 
 	void drawPoints()
 	{
+		mNode *currentNode;
 		int posX, posY;
+
+		if(this->openSet != NULL and this->openSet->size() > 0)
+		{
+			cv::Scalar color;
+			if(this->drawOpenSet) color = OPEN_COLOR;
+			else color = FREE_COLOR;
+			
+			for (int node = 0; node < this->openSet->size(); node++)
+			{
+				int currentNodeX = this->openSet->heapNodes[node]->x;
+				int currentNodeY = this->openSet->heapNodes[node]->y;
+				posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
+				posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
+				this->canvas->drawRectangle(posX, posY, color, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
+			}
+		}
+
+		if(this->closedSet.size() > 0)
+		{
+			cv::Scalar color;
+			if(this->drawClosedSet) color = CLOSED_COLOR;
+			else color = FREE_COLOR;
+			
+			map<mNode*, int>::const_iterator it;
+			for(it = this->closedSet.begin(); it != closedSet.end(); it++)
+			{
+				currentNode = it->first;
+				int currentNodeX = currentNode->x;
+				int currentNodeY = currentNode->y;
+				posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
+				posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
+				this->canvas->drawRectangle(posX, posY, color, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
+			}
+		}
+
+		// draw current best path
+		currentNode = this->path;
+		while(currentNode != NULL)
+		{
+			int currentNodeX = currentNode->x;
+			int currentNodeY = currentNode->y;
+			posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
+			posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
+			this->canvas->drawRectangle(posX, posY, PATH_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
+
+			// update current node
+			currentNode = currentNode->previous;
+		}
+
 		if(this->startNode != NULL)
 		{
 			posX = this->startNode->x * this->canvas->nodeSizeX + this->startNode->x * this->canvas->gridLinewidth;
@@ -143,44 +227,6 @@ public:
 			posX = this->endNode->x * this->canvas->nodeSizeX + this->endNode->x * this->canvas->gridLinewidth;
 			posY = this->endNode->y * this->canvas->nodeSizeY + this->endNode->y * this->canvas->gridLinewidth;
 			this->canvas->drawRectangle(posX, posY, END_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
-		}
-
-		if(this->openSet.size() > 0)
-		{
-			for (int node = 0; node < this->openSet.size(); node++)
-			{
-				int currentNodeX = this->openSet[node]->x;
-				int currentNodeY = this->openSet[node]->y;
-				posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
-				posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
-				this->canvas->drawRectangle(posX, posY, OPEN_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
-			}
-		}
-
-		if(this->closedSet.size() > 0)
-		{
-			for (int node = 0; node < this->closedSet.size(); node++)
-			{
-				int currentNodeX = this->closedSet[node]->x;
-				int currentNodeY = this->closedSet[node]->y;
-				posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
-				posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
-				this->canvas->drawRectangle(posX, posY, CLOSED_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
-			}
-		}
-
-		// draw current best path
-		mNode *currentNode = this->path;
-		while(currentNode != NULL)
-		{
-			int currentNodeX = currentNode->x;
-			int currentNodeY = currentNode->y;
-			posX = currentNodeX * this->canvas->nodeSizeX + currentNodeX * this->canvas->gridLinewidth;
-			posY = currentNodeY * this->canvas->nodeSizeY + currentNodeY * this->canvas->gridLinewidth;
-			this->canvas->drawRectangle(posX, posY, PATH_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
-
-			// update current node
-			currentNode = currentNode->previous;
 		}  
 
 	}
@@ -209,24 +255,29 @@ public:
 
 	void findPath()
 	{
+		if(this->startNode == NULL or this->endNode == NULL)
+		{
+			cout << "start and/or end nodes not set." << endl;
+			return;
+		}
+
 		double stime = omp_get_wtime();
 		cout << "starting findPath() method..." << endl;
 		
 		this->startNode->setGValue(0.0);
 		this->startNode->setHValue(this->endNode);
-		this->openSet.push_back(this->startNode);
+		this->openSet = new mHeap(this->canvas->grid->gridSize);
+		this->openSet->add(this->startNode);
 		mNode *currentNode = this->startNode;
 		this->path = currentNode;
 		int iter = 0;
 
-		while(this->openSet.size() > 0)
+		while(this->openSet->size() > 0)
 		{
 			iter++;
-			if(iter % 100 == 0) 
-				cout << "iter: " << iter << endl;			
-
-			currentNode = (*this).getNodeWithLowestValue();
-			this->closedSet.push_back(currentNode);
+			if(iter % 100 == 0) cout << "iter: " << iter << endl;			
+			currentNode = this->openSet->remove();
+			this->closedSet.insert(pair<mNode*, int>(currentNode, iter-1));
 			this->path = currentNode;
 
 			if(currentNode->compare(this->endNode))
@@ -239,17 +290,14 @@ public:
 			for (int node = 0; node < neighbors.size(); node++)
 			{
 				bool closedSetContainsNode;
-				if(std::find(this->closedSet.begin(), this->closedSet.end(), neighbors[node]) != this->closedSet.end())
+				if(this->closedSet.find(neighbors[node]) != this->closedSet.end())
 				{ closedSetContainsNode = true; } else closedSetContainsNode = false;
 				
 				if(!closedSetContainsNode) 
 				{
 					double newPath = currentNode->getFValue() + 1.0;
 					
-					bool openSetContainsNode;
-					if(std::find(this->openSet.begin(), this->openSet.end(), neighbors[node]) != this->openSet.end())
-					{ openSetContainsNode = true; } else openSetContainsNode = false;	
-					
+					bool openSetContainsNode = this->openSet->contains(neighbors[node]);					
 					if(newPath < neighbors[node]->getFValue() or !openSetContainsNode)
 					{	
 						neighbors[node]->setPrevious(currentNode);
@@ -257,7 +305,9 @@ public:
 						neighbors[node]->setHValue(this->endNode);
 						
 						if(!openSetContainsNode) 
-							this->openSet.push_back(neighbors[node]);
+							this->openSet->add(neighbors[node]);
+						else
+							this->openSet->update(neighbors[node]);
 					}
 				}
 			}
@@ -272,49 +322,15 @@ public:
 
 		stime = omp_get_wtime() - stime;
 		cout << endl << "search time: " << stime << " secs" << endl; 
+
 		if(this->path->compare(this->endNode)) 
-			cout << "path to end node was found :)" << endl;
+			cout << "path from start to end node was found :)" << endl << "length: " << this->path->getFValue() << endl;
 		else 
 			cout << "no path found :(" << endl;
 		
 		// draw last stage
 		(*this).draw();
 		(*this).show();
-	}
-
-	mNode * getNodeWithLowestValue()
-	{
-		int lowestIdx = 0;
-		mNode *currentNode = this->openSet[lowestIdx];
-		mNode *nextNode;
-
-		for(int node = 1; node < this->openSet.size(); node++)
-		{
-			nextNode = this->openSet[node];
-
-			if(nextNode->getFValue() < currentNode->getFValue())
-			{
-				currentNode = nextNode;
-				lowestIdx = node;
-			} else if(nextNode->getFValue() == currentNode->getFValue())
-			{
-				if(nextNode->getHValue() < currentNode->getHValue())
-				{
-					currentNode = nextNode;
-					lowestIdx = node;
-				}
-			}
-		}
-
-		(*this).removeFromOpenSet(lowestIdx);
-		return currentNode;
-	}
-
-	void removeFromOpenSet(int index)
-	{
-		int lastIndex = this->openSet.size() - 1;
-		swap(this->openSet[lastIndex], this->openSet[index]);
-		this->openSet.pop_back();
 	}
 };
 

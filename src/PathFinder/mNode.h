@@ -26,13 +26,15 @@ public:
 	double gValue;
 	double hValue;
 	mNode *previous;
+	int heapIndex;
 	
 	mNode() : x(-1), 
 			  y(-1), 
 			  walkable(false), 
 			  previous(NULL), 
 			  gValue(DBL_MAX), 
-			  hValue(DBL_MAX)
+			  hValue(DBL_MAX),
+			  heapIndex(-1)
 	{}
 
 	mNode(int _x, int _y, bool _walkable=true) : x(_x), 
@@ -40,7 +42,8 @@ public:
 												 walkable(_walkable), 
 												 previous(NULL), 
 												 gValue(DBL_MAX), 
-												 hValue(DBL_MAX)	
+												 hValue(DBL_MAX),
+												 heapIndex(-1)	
 	{}
 
 	mNode(const mNode &_otheNode)
@@ -51,6 +54,7 @@ public:
 		this->gValue = _otheNode.gValue;
 		this->hValue = _otheNode.hValue;
 		this->previous = _otheNode.previous;
+		this->heapIndex = _otheNode.heapIndex;
 
 	}
 
@@ -99,6 +103,7 @@ public:
 		cout << "g = " << this->gValue << ", ";
 		cout << "h = " << this->hValue << ", ";
 		cout << "f = " << (*this).getFValue() << endl;
+		cout << "heapIdx = " << (*this).getHeapIndex() << endl << endl;
 	}
 
 	void setPrevious(mNode *node)
@@ -127,6 +132,16 @@ public:
 	double getFValue()
 	{
 		return this->gValue + this->hValue;
+	}
+
+	void setHeapIndex(int _index)
+	{
+		this->heapIndex = _index;
+	}
+
+	int getHeapIndex()
+	{
+		return this->heapIndex;
 	}
 };
 

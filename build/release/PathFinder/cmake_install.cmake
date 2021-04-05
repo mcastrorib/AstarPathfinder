@@ -50,6 +50,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES
     "/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mNode.h"
     "/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mGrid.h"
+    "/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/mHeap.h"
     "/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/Canvas.h"
     "/home/matheus/Documentos/doutorado_ic/tese/NMR/AstarPathfinder/src/PathFinder/AStar.h"
     )

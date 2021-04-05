@@ -2,6 +2,17 @@
 Estado atual: o programa procura o caminho até o ponto final e recupera se houver um.
 A implementação está usando os containers <vector> para armazenar os conjuntos openSet e closedSet
 
-Numa malha de 100x100 com taxa de obstaculos de 25%:
+Numa malha de 100x100 com taxa de obstaculos de 25% utilizando <vector> para openSet e closedSet:
 sem visualização: 0.021 secs (~6500 iterações)
 com visualização: 16.657 secs (~6500 iterações)
+
+Utilizando <set> para closedSet os resultados pioraram:
+sem visualização: 0.557 secs (~6500 iterações)
+
+Utilizando <map> para closedSet:
+sem visualização: 0.022 secs (~6500 iterações)
+com visualização: 16.912 secs (~6500 iterações)
+
+Utilizando <map> para closedSet e minha propria implementação de heap para openSet:
+sem visualização: 0.015 secs (~6500 iterações)
+com visualização: 16.731 secs (~6500 iterações)
