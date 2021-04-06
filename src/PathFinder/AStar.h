@@ -1,35 +1,14 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-// include C++ standard libraries
-#include <unistd.h>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <omp.h>
-#include <map>
+// include CMake Configuration file
+#include "pathfinder_config.h"
 
-// include OpenCV core functions
-#include <opencv2/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include "opencv2/imgcodecs.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-
-// include other PathFinder classes
+// include PathFinder headers
 #include "mNode.h"
 #include "mHeap.h"
 #include "mGrid.h"
 #include "Canvas.h"
-
-#define WALL_COLOR {10, 10, 10}
-#define FREE_COLOR {150, 150, 150}
-#define OPEN_COLOR {112, 112, 0}
-#define CLOSED_COLOR {80, 80, 0}
-#define START_COLOR {0, 0, 110}
-#define END_COLOR {0, 0, 220}
-#define PATH_COLOR {0, 0, 230}
-
 
 using namespace std;
 

@@ -1,19 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
-// include C++ standard libraries
-#include <unistd.h>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
-
-// include OpenCV core functions
-#include <opencv2/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include "opencv2/imgcodecs.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui.hpp>
+// include CMake Configuration file
+#include "pathfinder_config.h"
 
 using namespace std;
 

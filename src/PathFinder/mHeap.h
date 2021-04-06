@@ -1,15 +1,13 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-
-// include C++ standard libraries
-#include <unistd.h>
-#include <iostream>
-#include <vector>
-#include <string>
+// include CMake Configuration file
+#include "pathfinder_config.h"
 
 // include other PathFinder classes
 #include "mNode.h"
+
+using namespace std;
 
 class mHeap
 {

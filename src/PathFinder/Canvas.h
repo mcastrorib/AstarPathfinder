@@ -1,29 +1,12 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-// include C++ standard libraries
-#include <unistd.h>
-#include <iostream>
-#include <vector>
-#include <string>
-
-// include OpenCV core functions
-#include <opencv2/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include "opencv2/imgcodecs.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui.hpp>
+// include CMake Configuration file
+#include "pathfinder_config.h"
 
 // include other PathFinder classes
-#include "mGrid.h"
 #include "mNode.h"
-
-
-#define CANVAS_WIDTH 600
-#define CANVAS_HEIGHT 600
-#define GRID_LINEWIDTH 1
-#define BG_COLOR {127, 127, 127}
-#define GRID_COLOR {0, 0, 0}
+#include "mGrid.h"
 
 using namespace std;
 
