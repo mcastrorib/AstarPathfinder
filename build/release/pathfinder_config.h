@@ -1,5 +1,0 @@
-// the configured options and settings for Tutorial
-#define PATHFINDER_VERSION_MAJOR @PATHFINDER_VERSION_MAJOR @
-#define PATHFINDER_VERSION_MINOR @PATHFINDER_VERSION_MINOR @
-
-#define USE_PATHFINDER

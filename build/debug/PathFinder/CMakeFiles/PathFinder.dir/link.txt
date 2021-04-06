@@ -1,2 +1,0 @@
-/usr/bin/ar qc libPathFinder.a CMakeFiles/PathFinder.dir/mNode.cpp.o CMakeFiles/PathFinder.dir/mGrid.cpp.o CMakeFiles/PathFinder.dir/Canvas.cpp.o CMakeFiles/PathFinder.dir/AStar.cpp.o
-/usr/bin/ranlib libPathFinder.a
