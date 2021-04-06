@@ -8,18 +8,10 @@
 #include <string>
 #include <random>
 
-
-// include OpenCV core functions
-#include <opencv2/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include "opencv2/imgcodecs.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-
 // include other PathFinder classes
 #include "mNode.h"
 
-#define OBSTACLES_RATE 0.25
+#define OBSTACLES_RATE 0.2
 
 using namespace std;
 
@@ -30,8 +22,9 @@ public:
 	int gridDimX;
 	int gridDimY;
 	mNode *nodes;
+	int connectivity;
 
-	mGrid(int _dimX, int _dimY) : gridDimX(_dimX), gridDimY(_dimY), gridSize(_dimX*_dimY)
+	mGrid(int _dimX, int _dimY) : gridDimX(_dimX), gridDimY(_dimY), gridSize(_dimX*_dimY), connectivity(4)
 	{
 		nodes = new mNode[gridSize];
 		(*this).buildGridOfNodes();
@@ -43,6 +36,7 @@ public:
 		this->gridDimX = otherGrid.gridDimX;
 		this->gridDimY = otherGrid.gridDimY;
 		this->nodes = otherGrid.nodes;
+		this->connectivity = otherGrid.connectivity;
 	}
 
 	virtual ~mGrid()
@@ -63,12 +57,46 @@ public:
 		return index;
 	}
 
-	mNode getNode(int x, int y)
+	mNode * getNode(int x, int y)
 	{
-		return this->nodes[getNodeIdx(x,y)];
+		return &this->nodes[getNodeIdx(x,y)];
+	}
+
+	void setConnectivity(int _connectivity)
+	{
+		if(_connectivity == 4) 
+		{ 
+			this->connectivity = _connectivity;
+		} else
+		if(_connectivity == 8) 
+		{
+			this->connectivity = _connectivity;
+		} else
+		{
+			cout << "Assigned connectivity is not valid (only accept 4 or 8)." << endl;
+			cout << "Current connectivity is " << this->connectivity << endl;
+		}
 	}
 
 	vector<mNode *> getConnectedNeighbors(int _x, int _y)
+	{
+		if(this->connectivity == 4) 
+		{
+				return this->getConnectedNeighbors_4n(_x, _y);
+		}
+		else if (this->connectivity == 8) 
+		{
+			return this->getConnectedNeighbors_8n(_x, _y);
+		}
+		else
+		{
+			vector<mNode *> emptyNeighbors(0);
+			return emptyNeighbors;
+		}	
+		
+	}
+
+	vector<mNode *> getConnectedNeighbors_4n(int _x, int _y)
 	{
 		vector<mNode*> neighbors(0);
 		int index;
@@ -95,6 +123,62 @@ public:
 			index = (*this).getNodeIdx(_x, _y+1);
 			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
 		} 
+
+		return neighbors;
+	}
+
+	vector<mNode *> getConnectedNeighbors_8n(int _x, int _y)
+	{
+		vector<mNode*> neighbors(0);
+		int index;
+		if(_x-1 >= 0)
+		{
+			index = (*this).getNodeIdx(_x-1, _y);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		} 
+		
+		if(_x+1 < this->gridDimX)
+		{
+			index = (*this).getNodeIdx(_x+1, _y);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);		
+		}
+
+		if(_y-1 >= 0)
+		{
+			index = (*this).getNodeIdx(_x, _y-1);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		} 
+		 
+		if(_y+1 < this->gridDimY)
+		{
+			index = (*this).getNodeIdx(_x, _y+1);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		} 
+
+		// get diagonal neighbors
+		if(_x-1 >= 0 and _y-1 >= 0)
+		{
+			index = (*this).getNodeIdx(_x-1, _y-1);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		}
+
+		if(_x-1 >= 0 and _y+1 < this->gridDimY)
+		{
+			index = (*this).getNodeIdx(_x-1, _y+1);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		}
+
+		if(_x+1 < this->gridDimX and _y-1 >= 0)
+		{
+			index = (*this).getNodeIdx(_x+1, _y-1);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		}
+
+		if(_x+1 < this->gridDimX and _y+1 < this->gridDimY)
+		{
+			index = (*this).getNodeIdx(_x+1, _y+1);
+			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
+		}
 
 		return neighbors;
 	}
