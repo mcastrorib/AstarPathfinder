@@ -119,6 +119,11 @@ public:
 		cout << "deleting Astar...Done" << endl;
 	}
 
+	void setGridConnectivity(int con)
+	{
+		this->canvas->grid->setConnectivity(con);
+	}
+
 	void setDrawOpenSet(bool _b)
 	{
 		this->drawOpenSet = _b;
@@ -138,15 +143,15 @@ public:
 	void setStartNode(int x, int y)
 	{
 		int index = this->canvas->grid->getNodeIdx(x,y);
-		this->startNode = &this->canvas->grid->nodes[index];
-		this->startNode->walkable = true;
+		if(this->canvas->grid->nodes[index].walkable)
+			this->startNode = &this->canvas->grid->nodes[index];		
 	}
 
 	void setEndNode(int x, int y)
 	{
 		int index = this->canvas->grid->getNodeIdx(x,y);	
-		this->endNode = &this->canvas->grid->nodes[index];	
-		this->endNode->walkable = true;
+		if(this->canvas->grid->nodes[index].walkable)
+			this->endNode = &this->canvas->grid->nodes[index];
 	}
 
 	void draw()
@@ -240,8 +245,8 @@ public:
 			{
 				posX = i * this->canvas->nodeSizeX + i * this->canvas->gridLinewidth;
 				posY = j * this->canvas->nodeSizeY + j * this->canvas->gridLinewidth;;
-				mNode n = this->canvas->grid->getNode(i,j);	
-				if(n.walkable)
+				mNode *node = this->canvas->grid->getNode(i,j);	
+				if(node->walkable)
 				{
 					this->canvas->drawRectangle(posX, posY, FREE_COLOR, this->canvas->nodeSizeX, this->canvas->nodeSizeY);
 				} else
@@ -265,7 +270,7 @@ public:
 		cout << "starting findPath() method..." << endl;
 		
 		this->startNode->setGValue(0.0);
-		this->startNode->setHValue(this->endNode);
+		(*this).applyHeuristic(this->startNode); //->setHValue(this->endNode);
 		this->openSet = new mHeap(this->canvas->grid->gridSize);
 		this->openSet->add(this->startNode);
 		mNode *currentNode = this->startNode;
@@ -280,32 +285,45 @@ public:
 			this->closedSet.insert(pair<mNode*, int>(currentNode, iter-1));
 			this->path = currentNode;
 
+			// Stop if destination node is reached
 			if(currentNode->compare(this->endNode))
 			{
 				this->path = this->endNode;
 				break;
 			}
 
+			// Get connected neighbors of current node and compare them 
 			vector<mNode*> neighbors = this->canvas->grid->getConnectedNeighbors(currentNode->x, currentNode->y);
+			double currentGValue = currentNode->getGValue();
+			double currentHValue = currentNode->getHValue();
+			double currentFValue = currentNode->getFValue();			
 			for (int node = 0; node < neighbors.size(); node++)
 			{
+				// Check if neighbors is already in closed set
 				bool closedSetContainsNode;
 				if(this->closedSet.find(neighbors[node]) != this->closedSet.end())
-				{ closedSetContainsNode = true; } else closedSetContainsNode = false;
+				{ 
+					closedSetContainsNode = true; 
+				} else 
+					closedSetContainsNode = false;
 				
+				// if neighbor is not closed, evaluate new path to neighbor 
 				if(!closedSetContainsNode) 
 				{
-					double newPath = currentNode->getFValue() + 1.0;
+					double distanceToCurrent = (*this).EuclideanDistance(currentNode, neighbors[node]);
+					double newPath = currentFValue + distanceToCurrent;
 					
 					bool openSetContainsNode = this->openSet->contains(neighbors[node]);					
 					if(newPath < neighbors[node]->getFValue() or !openSetContainsNode)
 					{	
 						neighbors[node]->setPrevious(currentNode);
-						neighbors[node]->setGValue(currentNode->gValue + 1.0);
-						neighbors[node]->setHValue(this->endNode);
-						
+						neighbors[node]->setGValue(currentGValue + distanceToCurrent);
+												
 						if(!openSetContainsNode) 
+						{
+							(*this).applyHeuristic(neighbors[node]);
 							this->openSet->add(neighbors[node]);
+						}
 						else
 							this->openSet->update(neighbors[node]);
 					}
@@ -331,6 +349,43 @@ public:
 		// draw last stage
 		(*this).draw();
 		(*this).show();
+	}
+
+	void applyHeuristic(mNode *current)
+	{
+		current->setHValue(heuristicFunction(current, this->endNode));
+	}
+
+	double heuristicFunction(mNode *nodeA, mNode *nodeB)
+	{
+		return EuclideanDistance(nodeA, nodeB);
+	}
+
+	double EuclideanDistance(mNode *nodeA, mNode *nodeB)
+	{
+		double dx = nodeA->x - nodeB->x;
+		double dy = nodeA->y - nodeB->y;
+
+		return sqrt(dx*dx + dy*dy);	
+	
+	}
+
+	double EuclideanDistance(double dx, double dy)
+	{
+		return sqrt(dx*dx + dy*dy);	
+	}
+
+	double ManhatannDistance(mNode *nodeA, mNode *nodeB)
+	{
+		double dx = nodeA->x - nodeB->x;
+		double dy = nodeA->y - nodeB->y;
+
+		return (dx + dy);	
+	}
+
+	double ManhatannDistance(double dx, double dy)
+	{
+		return (dx + dy);		
 	}
 };
 

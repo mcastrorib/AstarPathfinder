@@ -111,17 +111,24 @@ public:
 		this->previous = node;
 	}
 
+	mNode * getPrevious()
+	{
+		return this->previous;
+	}
+
 	void setGValue(double _val)
 	{
 		this->gValue = _val;
 	}
 
-	void setHValue(mNode *node)
+	double getGValue()
 	{
-		double dx = this->x - node->x;
-		double dy = this->y - node->y;
+		return this->gValue;
+	}
 
-		this->hValue = sqrt(dx*dx + dy*dy);
+	void setHValue(double _newH)
+	{
+		this->hValue = _newH;
 	}
 
 	double getHValue()

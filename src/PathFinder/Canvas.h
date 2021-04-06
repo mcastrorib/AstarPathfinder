@@ -19,8 +19,8 @@
 #include "mNode.h"
 
 
-#define CANVAS_WIDTH 800
-#define CANVAS_HEIGHT 800
+#define CANVAS_WIDTH 600
+#define CANVAS_HEIGHT 600
 #define GRID_LINEWIDTH 1
 #define BG_COLOR {127, 127, 127}
 #define GRID_COLOR {0, 0, 0}
@@ -40,11 +40,11 @@ public:
     int imageChannels;
     int imageWidth;
     int imageHeight;
-    string windowName;
+    string windowName = "A* Algorithm";
     
 
 
-	Canvas(int _x, int _y) : windowName("Main Window")
+	Canvas(int _x, int _y) 
 	{
 		this->grid = new mGrid(_x, _y);
 		this->backgroundColor = BG_COLOR;
@@ -56,7 +56,7 @@ public:
 		(*this).drawGridLines();
 	}
 
-	Canvas(mGrid *_grid) : windowName("Main Window"), grid(_grid)
+	Canvas(mGrid *_grid) : grid(_grid)
 	{
 		this->backgroundColor = BG_COLOR;
 		this->gridColor = GRID_COLOR;
