@@ -1,14 +1,8 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-// include CMake Configuration file
-#include "pathfinder_config.h"
-
-// include PathFinder headers
-#include "mNode.h"
-#include "mHeap.h"
-#include "mGrid.h"
-#include "Canvas.h"
+// include Configuration file
+#include "PathFinder.h"
 
 using namespace std;
 
@@ -37,9 +31,7 @@ public:
 							 visualTimeRate(0)
 	{		
 		this->canvas = new Canvas(_x, _y);
-		// vector<mNode*> openSet();
 		map<mNode*, int> closedSet();
-
 		(*this).drawGridNodes();
 	}
 
@@ -53,9 +45,21 @@ public:
 							 visualize(false),
 							 visualTimeRate(0)
 	{		
-		// vector<mNode*> openSet();
 		map<mNode*, int> closedSet();
+		(*this).drawGridNodes();
+	}
 
+	AStar(mGrid *_grid) : startNode(NULL), 
+						  endNode(NULL), 
+						  path(NULL), 
+						  openSet(NULL),
+						  drawOpenSet(true),
+						  drawClosedSet(true),
+						  visualize(false),
+						  visualTimeRate(0)
+	{		
+		this->canvas = new Canvas(_grid);
+		map<mNode*, int> closedSet();
 		(*this).drawGridNodes();
 	}
 
@@ -119,11 +123,23 @@ public:
 		this->visualTimeRate = time;
 	}
 
+	void getStartNode()
+	{
+		vector<int> Pos = this->canvas->getMousePosition("Select start position: ");
+		(*this).setStartNode(Pos[0], Pos[1]);
+	}
+
 	void setStartNode(int x, int y)
 	{
 		int index = this->canvas->grid->getNodeIdx(x,y);
 		if(this->canvas->grid->nodes[index].walkable)
 			this->startNode = &this->canvas->grid->nodes[index];		
+	}
+
+	void getEndNode()
+	{
+		vector<int> Pos = this->canvas->getMousePosition("Select end position: ");
+		(*this).setEndNode(Pos[0], Pos[1]);
 	}
 
 	void setEndNode(int x, int y)

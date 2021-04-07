@@ -1,11 +1,8 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-// include CMake Configuration file
-#include "pathfinder_config.h"
-
-// include other PathFinder classes
-#include "mNode.h"
+// include Configuration file
+#include "PathFinder.h"
 
 using namespace std;
 

@@ -1,8 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
-// include CMake Configuration file
-#include "pathfinder_config.h"
+// include Configuration file
+#include "PathFinder.h"
 
 using namespace std;
 

@@ -1,13 +1,8 @@
 #ifndef GRID_H
 #define GRID_H
 
-// include Astar Configuration file
-#include "pathfinder_config.h"
-
-// include other PathFinder classes
-
-using namespace std;
-#include "mNode.h"
+// include Configuration file
+#include "PathFinder.h"
 
 using namespace std;
 
@@ -24,6 +19,15 @@ public:
 	{
 		nodes = new mNode[gridSize];
 		(*this).buildGridOfNodes();
+	};
+
+	mGrid(cv::Mat *image) : connectivity(4)
+	{	
+		this->gridDimX = image->rows; 
+		this->gridDimY = image->cols;
+		this->gridSize = this->gridDimX * this->gridDimY; 
+		nodes = new mNode[gridSize];
+		(*this).buildGridOfNodesFromImage(image);
 	};
 
 	mGrid(const mGrid &otherGrid)
@@ -126,31 +130,9 @@ public:
 	vector<mNode *> getConnectedNeighbors_8n(int _x, int _y)
 	{
 		vector<mNode*> neighbors(0);
+		neighbors = (*this).getConnectedNeighbors_4n(_x, _y);
+
 		int index;
-		if(_x-1 >= 0)
-		{
-			index = (*this).getNodeIdx(_x-1, _y);
-			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
-		} 
-		
-		if(_x+1 < this->gridDimX)
-		{
-			index = (*this).getNodeIdx(_x+1, _y);
-			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);		
-		}
-
-		if(_y-1 >= 0)
-		{
-			index = (*this).getNodeIdx(_x, _y-1);
-			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
-		} 
-		 
-		if(_y+1 < this->gridDimY)
-		{
-			index = (*this).getNodeIdx(_x, _y+1);
-			if(this->nodes[index].walkable) neighbors.push_back(&this->nodes[index]);
-		} 
-
 		// get diagonal neighbors
 		if(_x-1 >= 0 and _y-1 >= 0)
 		{
@@ -192,6 +174,28 @@ public:
 					walkable = false;
 				index = (*this).getNodeIdx(i,j);
 				this->nodes[index].set(i, j, walkable);
+			}
+		}
+	}
+
+	void buildGridOfNodesFromImage(cv::Mat *_image)
+	{
+		bool walkable;
+		int index;
+		int channels = _image->channels();
+		for(int y = 0; y < this->gridDimY; y++)
+		{
+
+			uchar *currentPixel;
+			currentPixel = _image->ptr<uchar>(y);
+	
+			for(int x = 0; x < this->gridDimX; x++)
+			{
+				walkable = false;
+				if(currentPixel[x*channels] == GRID_WALKABLE_COLOR) 
+					walkable = true;
+				index = (*this).getNodeIdx(x, y);
+				this->nodes[index].set(x, y, walkable);
 			}
 		}
 	}

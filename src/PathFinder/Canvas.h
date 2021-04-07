@@ -1,12 +1,8 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-// include CMake Configuration file
-#include "pathfinder_config.h"
-
-// include other PathFinder classes
-#include "mNode.h"
-#include "mGrid.h"
+// include Configuration file
+#include "PathFinder.h"
 
 using namespace std;
 
@@ -24,8 +20,9 @@ public:
     int imageWidth;
     int imageHeight;
     string windowName = "A* Algorithm";
-    
-
+	static int mousePosX;
+	static int mousePosY;
+	
 
 	Canvas(int _x, int _y) 
 	{
@@ -189,7 +186,36 @@ public:
 		    }
 		}
 	}
+
+	static void mouseCallback(int  event, int  x, int  y, int  flag, void *param)
+	{
+		if (event == cv::EVENT_LBUTTONDOWN) {
+			cout << "(" << x << ", " << y << ")" << endl;
+			Canvas::mousePosX = x;
+			Canvas::mousePosY = y;
+		}
+	}
+
+	vector<int> getMousePosition(string instruction)
+	{
+		cv::namedWindow(instruction);
+		cv::setMouseCallback(instruction, Canvas::mouseCallback);
+
+		cv::imshow(instruction, (*image));
+		cv::waitKey(0);
+		cv::destroyWindow(instruction);
+
+		int posX = (Canvas::mousePosX - (Canvas::mousePosX / this->nodeSizeX - 1)) / this->nodeSizeX;
+		int posY = (Canvas::mousePosY - (Canvas::mousePosY / this->nodeSizeY - 1)) / this->nodeSizeY;
+		cout << "start pos: " << posX << ", " << posY << endl;
+		vector<int> mousePos = {posX, posY};
+		return mousePos;
+	}
+
 };
+
+int Canvas::mousePosX = 0;
+int Canvas::mousePosY = 0;
 
 
 #endif
